@@ -1,0 +1,68 @@
+@import '../../styles/util.scss';
+
+.container {
+  flex: 1 0 90%;
+}
+
+.header {
+  font-family: $font-logo;
+  font-size: $font-mega;
+  color: $color-pupple;
+}
+
+.sub-header {
+  font-family: $font-body;
+  font-size: $font-sub-header;
+  color: $color-light-pupple;
+}
+
+.content-wrapper {
+  width: 100%;
+  margin-top: 3rem;
+}
+.input {
+  padding: $padding-default;
+  text-align: center;
+  font-size: $font-sub-header;
+  font-family: $font-input;
+  border: 1px solid $color-emerald;
+  color: $color-emerald;
+  @include rounded;
+  @include input;
+  width: 90%;
+  @include respond-to('medium') {
+    width: 500px;
+    transition: width 0.3s;
+  }
+
+  &:focus {
+    width: 90%;
+  }
+}
+
+.divider {
+  @include divider($color-emerald);
+  width: 90%;
+  @include respond-to('medium') {
+    width: 500px;
+    transition: width 0.3s;
+  }
+  padding: $padding-default;
+  margin: 1.2rem 0;
+}
+
+.button {
+  display: block;
+  padding: $padding-default;
+  color: white;
+  font-size: $font-sub-header;
+  font-family: $font-input;
+  text-align: center;
+  width: 90%;
+  @include respond-to('medium') {
+    width: 500px;
+    transition: width 0.3s;
+  }
+  @include rounded;
+  @include button-bg($color-emerald);
+}

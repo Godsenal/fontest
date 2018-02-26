@@ -1,0 +1,21 @@
+span, div, a, h1 {
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select, textarea {
+  line-height: 1.5;
+  font-family: 'Ubuntu', 'Nanum Gothic', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  &:focus {
+    outline: none;
+  }
+}
+
+input {
+  border: inherit;
+}

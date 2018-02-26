@@ -1,0 +1,10 @@
+@import 'utils/functions.scss';
+@import 'utils/mixins.scss';
+@import 'utils/variables.scss';
+
+/**
+  왜 main과 util을 따로 만들었을까?
+  main - 한 번만 설정해 주면 되는 것. 계속 컴포넌트마다 import할 경우 중복되서 불러와짐.
+  https://github.com/webpack-contrib/style-loader/issues/143
+  참고.
+*/

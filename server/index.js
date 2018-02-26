@@ -31,8 +31,19 @@ if (isDev) {
   app.use(webpackHotMiddleware(compiler));
 
   console.log(`Server started in DEVELOPMENT! ${chalk.green('✓')}`);
+  // webpackDevMiddleware uses memory-fs internally to store build
+  // https://github.com/jantimon/html-webpack-plugin/issues/145#issuecomment-170554832
+  const fs = middleware.fileSystem;
+
   app.get('*', (req, res) => {
-    res.sendFile(path.join(outputPath, 'index.html'));
+    fs.readFile(path.join(outputPath, 'index.html'), (err, file) => {
+      if (err) {
+        res.sendStatus(404);
+      }
+      else {
+        res.send(file.toString());
+      }
+    });
   });
 }
 else {

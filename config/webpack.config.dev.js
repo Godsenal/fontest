@@ -98,8 +98,10 @@ module.exports = ({
           'style-loader',
           {
             loader: 'css-loader',
-            options: {
-              sourceMap: true,
+            options: { // sourceMap: true makes warning in FF.
+              importLoaders: 1,
+              modules: true,
+              localIdentName: '[name]__[local]__[hash:base64:5]',
             },
           }, {
             loader: 'postcss-loader',
