@@ -37,6 +37,7 @@
         "functions": "only-multiline"
       }
     ],
+    "consistent-return": "off",
     "dot-notation": "warn",
     "function-paren-newline": "off",
     "generator-star-spacing": "off",

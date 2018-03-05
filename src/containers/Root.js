@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import App from './App';
-import configureStore from '../store/configureStore';
 
-const store = configureStore();
+import App from './App';
 
 export default class Root extends Component {
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+    store: PropTypes.object.isRequired,
+  }
   render() {
+    const { store, history } = this.props;
     return (
       <Provider store={store}>
-        <BrowserRouter history={history}>
+        <Router history={history}>
           <Route path="/" component={App} />
-        </BrowserRouter>
+        </Router>
       </Provider>
     );
   }

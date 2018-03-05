@@ -1,3 +1,1 @@
-import LandingSide from './LandingSide';
-
-export default LandingSide;
+export { default } from './LandingSide';

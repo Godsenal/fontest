@@ -1,0 +1,22 @@
+@import '../../styles/util.scss';
+.container {
+  width: 100%;
+}
+.input {
+  padding: $padding-default;
+  text-align: center;
+  font-size: $font-sub-header;
+  font-family: $font-input;
+  border: 1px solid $color-emerald;
+  color: $color-emerald;
+  @include rounded;
+  @include input;
+  width: 90%;
+  @include respond-to('medium') {
+    width: 500px;
+    transition: width 0.3s;
+    &:focus {
+      width: 90%;
+    }
+  }
+}

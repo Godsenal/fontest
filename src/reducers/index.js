@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import link from './link';
+
+import environment from './environment';
+import font from './font';
 
 const rootReducer = combineReducers({
-  link,
+  environment, font,
 });
 
 export default rootReducer;

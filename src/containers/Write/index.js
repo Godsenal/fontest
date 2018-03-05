@@ -1,3 +1,1 @@
-import Write from './Write';
-
-export default Write;
+export { default } from './Write';

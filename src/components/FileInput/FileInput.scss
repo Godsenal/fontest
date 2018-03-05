@@ -1,0 +1,22 @@
+@import '../../styles/util.scss';
+
+.container {
+  width: 90%;
+  @include respond-to('medium');
+  width: 50%;
+}
+
+.input {
+  display: none;
+}
+
+.button {
+  display: block;
+  padding: $padding-default;
+  color: white;
+  font-size: $font-sub-header;
+  font-family: $font-input;
+  text-align: center;
+  @include rounded;
+  @include button-bg($color-emerald);
+}
