@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
 
 import history from '../../utils/history';
-import { loadFontFile } from '../../actions/font';
+import { loadFontFile, clearFont } from '../../actions/font';
 import LinkInput from '../LinkInput';
 import FileInput from '../FileInput';
 import styles from './LandingBody.scss';
@@ -11,7 +11,7 @@ import styles from './LandingBody.scss';
 const cx = classNames.bind(styles);
 class LandingBody extends Component {
   handleFileUpload = (file, type) => {
-    this.props.loadFontFile(file, type)
+    this.props.loadFontFile(file, type, this.props.fontLoad.currentFonts)
       .then(() => {
         history.push('/write');
       });
@@ -37,6 +37,7 @@ class LandingBody extends Component {
           </div>
           <FileInput handleFileUpload={this.handleFileUpload} />
         </div>
+        <button onClick={this.props.clearFont}>CLEAR!</button>
       </div>
     );
   }
@@ -47,9 +48,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadFontFile: (file, type) => (
-    dispatch(loadFontFile(file, type))
+  loadFontFile: (file, type, currentFont) => (
+    dispatch(loadFontFile(file, type, currentFont))
   ),
+  clearFont: () => dispatch(clearFont()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingBody);

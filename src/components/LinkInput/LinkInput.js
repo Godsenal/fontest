@@ -28,14 +28,13 @@ export default class LinkInput extends PureComponent {
     });
   }
   handleKeyPress = (e) => {
-    
     if (e.key === 'Enter') {
       const { inputVal } = this.state;
       const link = inputVal.trim();
       if (checkurl.test(link)) {
         this.props.handleInputEnter(this.state.inputVal);
       }
-      // Let user knoe it's Not url...
+      // Let user know it's Not url...
       this.setState({
         inputVal: '',
       });

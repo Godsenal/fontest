@@ -9,6 +9,7 @@ const initialState = {
     fontName: 'monospace, cursive',
     link: '',
     currentFonts: [],
+    error: '',
   },
 };
 
@@ -30,6 +31,13 @@ export default function font(state = initialState, action) {
           currentFonts: { $push: action.isExist ? [] : [action.fontName] },
         },
       });
+    case types.LOAD_FONT_LINK_FAILURE:
+      return update(state, {
+        load: {
+          status: { $set: 'FAILURE' },
+          error: { $set: action.error },
+        },
+      });
     case types.LOAD_FONT_FILE:
       return update(state, {
         load: {
@@ -42,7 +50,19 @@ export default function font(state = initialState, action) {
           status: { $set: 'SUCCESS' },
           isLink: { $set: false },
           fontName: { $set: action.fontName },
+          currentFonts: { $push: action.isExist ? [] : [action.fontName] },
         },
+      });
+    case types.LOAD_FONT_FILE_FAILURE:
+      return update(state, {
+        load: {
+          status: { $set: 'FAILURE' },
+          error: { $set: action.error },
+        },
+      });
+    case types.CLEAR_FONT:
+      return update(state, {
+        load: { $set: initialState.load },
       });
     default:
       return state;

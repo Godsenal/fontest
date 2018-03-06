@@ -7,18 +7,13 @@ import {
   LOAD_FONT_FILE,
   LOAD_FONT_FILE_SUCCESS,
   LOAD_FONT_FILE_FAILURE,
+  CLEAR_FONT,
 } from '../constants/actionTypes';
 import { checkExist } from '../utils/check';
+import * as fontUtil from '../utils/font';
 
-const baseUrl = '/api/font';
-const fontReg = /(css|woff2|woff|ttf|otf|eot)/;
-const FONT_FORMAT = {
-  woff: 'woff',
-  woff2: 'woff2',
-  ttf: 'truetype',
-  otf: 'opentype',
-  eot: null,
-};
+
+const reader = new FileReader();
 
 const loadLink = link => ({
   type: LOAD_FONT_LINK,
@@ -31,8 +26,9 @@ const loadLinkSuccess = (fontName, isExist = false) => ({
   isExist,
 });
 
-const loadLinkFailure = () => ({
+const loadLinkFailure = (error) => ({
   type: LOAD_FONT_LINK_FAILURE,
+  error,
 });
 
 const loadFile = link => ({
@@ -40,82 +36,29 @@ const loadFile = link => ({
   link,
 });
 
-const loadFileSuccess = (fontName) => ({
+const loadFileSuccess = (fontName, isExist = false) => ({
   type: LOAD_FONT_FILE_SUCCESS,
   fontName,
+  isExist,
 });
 
-const loadFileFailure = () => ({
+const loadFileFailure = (error) => ({
   type: LOAD_FONT_FILE_FAILURE,
+  error,
 });
-
-const checkFileType = (type) => {
-  let fileType = false;
-  if (type) {
-    fileType = type.match(fontReg)[0];
-  }
-  return fileType;
-};
-const parseFont = (link, fileType) => {
-  const fontName = Date.now().toString();
-  const s = document.createElement('style');
-  const format = FONT_FORMAT[fileType];
-  s.type = 'text/css';
-  s.appendChild(document.createTextNode(`
-    @font-face {
-      font-family: '${fontName}';
-      src: url('${link}') format('${format}');
-    }
-  `));
-  const head = document.head || document.head[0];
-  head.appendChild(s);
-
-  return fontName;
-};
-const parseCSS = (data, currentFonts) => {
-  const reg = data.match(/@font-face {([^}]+)}/g);
-  /* Get Font-family from style sheet */
-  const parseName =
-    reg.length >= 0 ?
-      reg[0].match(/font-family: ([^;]+)/)[1] :
-      null;
-  if (parseName) {
-    const fontName = parseName.trim().replace(/'/g, '');
-    /*
-      Find current Font is already exist ( User searched in this pages)
-      If it's true, return SUCCESS
-    */
-    const isExist = checkExist(currentFonts, fontName);
-    if (!isExist) {
-      /*
-          Add Font-face ONLY style.
-          Use loof of appendChild rather using join('\n').
-          Maybe slightly faster ..
-        */
-      const s = document.createElement('style');
-      s.type = 'text/css';
-      for (let i = 0; i < reg.length; i++) {
-        s.appendChild(document.createTextNode(reg[i]));
-      }
-      const head = document.head || document.head[0];
-      head.appendChild(s);
-    }
-    return fontName;
-  }
-  return false;
-};
 
 export const loadFontLink = (link, currentFonts) => (
   dispatch => {
     dispatch(loadLink(link));
     return axios.get(link).then((res) => {
-      const fileType = checkFileType(res.headers['content-type']);
+      const fileType = fontUtil.checkFileType(res.headers['content-type']);
       let fontName = '';
       if (fileType === 'css') {
-        fontName = parseCSS(res.data, currentFonts);
+        fontName = fontUtil.parseCSS(res.data, currentFonts);
       }
       else if (fileType) {
-        fontName = parseFont(link, fileType);
+        const tempName = Date.now().toString();
+        fontName = fontUtil.parseFont(tempName, link, fileType, true);
       }
       if (fontName) {
         const font = new FontFaceObserver(fontName);
@@ -132,27 +75,64 @@ export const loadFontLink = (link, currentFonts) => (
   }
 );
 
-export const loadFontFile = (file, type) => (
+export const loadFontFile = (file, type, currentFonts = []) => (
   dispatch => {
     dispatch(loadFile());
-    const formData = new FormData();
-    formData.append('file', file);
-    return axios.post(baseUrl, formData)
-      .then((res) => {
-        const { path, fileName } = res.data;
-        const { protocol, hostname, port } = window.location;
-        const fontName = parseFont(`${protocol}//${hostname}:${port}/api/font/${type}`, type);
-        if (fontName) {
-          const font = new FontFaceObserver(fontName);
-          return font.load()
-            .then(() => {
-              dispatch(loadFileSuccess(fontName));
-            })
-            .catch(() => {
-              dispatch(loadFileFailure());
-            });
+    return new Promise((resolve, reject) => {
+      reader.onload = () => {
+        /*
+          1. Read Font file as Unit8Array, which file type is tff, woff, woff2, eot, otf, svg ...
+          2. Array to String.
+          3. use window's 'btoa' for encode binarystring as base64.
+          4. use parseFont function for add styling.
+          4-1. If font has already added to stylesheet ( check currentFonts ), just resolve promise.
+        */
+        const arrayBuffer = reader.result;
+        const byte = new Uint8Array(arrayBuffer);
+        let binaryString = '';
+        for (let i = 0; i < byte.length; i++) {
+          binaryString += String.fromCharCode(byte[i]);
         }
-        dispatch(loadFileFailure());
-      });
+        const base64 = btoa(binaryString);
+
+        const fontName = fontUtil.getFontFamily(file.name);
+        const isExist = checkExist(currentFonts, fontName);
+        if (!isExist) {
+          fontUtil.parseFont(fontName, base64, type);
+          if (fontName) {
+            const font = new FontFaceObserver(fontName);
+            return font.load()
+              .then(() => {
+                dispatch(loadFileSuccess(fontName));
+                resolve();
+              })
+              .catch(() => {
+                dispatch(loadFileFailure('CANNOT LOAD FONT'));
+                reject();
+              });
+          }
+          dispatch(loadFileFailure('CANNOT ADD STYLE'));
+          reject();
+        }
+        dispatch(loadFileSuccess(fontName, true));
+        resolve();
+      };
+      reader.onerror = error => {
+        dispatch(loadFileFailure('CANNOT READ FILE'));
+        reject(error);
+      };
+      reader.readAsArrayBuffer(file); // readAsBinaryString - Must not used in production mode ?
+    });
   }
 );
+
+/* Remove Stylesheet which defines all font-face user added. */
+export const clearFont = () => {
+  const stylesheet = document.getElementById('fonttest-temp-style-sheet');
+  if (stylesheet) {
+    stylesheet.remove();
+  }
+  return {
+    type: CLEAR_FONT,
+  };
+};
