@@ -1,35 +1,31 @@
 @import '../../styles/util.scss';
 
 .container {
-  flex: 1 0 90%;
+  width: 100%;
+  text-align: center;
 }
 
 .header {
   font-family: $font-logo;
   font-size: $font-mega;
-  color: $color-pupple;
+  color: #fff;
 }
 
 .sub-header {
   font-family: $font-body;
   font-size: $font-sub-header;
-  color: $color-light-pupple;
-}
-
-.content-wrapper {
-  width: 100%;
-  margin-top: 3rem;
+  color: #fff;
 }
 
 .divider {
-  @include divider($color-emerald);
+  @include divider($color-blue);
   width: 90%;
   @include respond-to('medium') {
     width: 500px;
     transition: width 0.3s;
   }
   padding: $padding-default;
-  margin: 1.2rem 0;
+  margin: 1.2rem auto;
 }
 
 .button {
@@ -44,6 +40,21 @@
     width: 500px;
     transition: width 0.3s;
   }
+  margin: 1.2rem auto;
   @include rounded;
-  @include button-bg($color-emerald);
+  @include button-bg($color-darkblue);
+}
+
+.fab {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  right: 20px;
+  bottom: 20px;
+  background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

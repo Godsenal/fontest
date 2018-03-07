@@ -2,14 +2,35 @@
 
 .container {
   width: 90%;
-  @include respond-to('medium');
-  width: 50%;
+  @include respond-to('medium') {
+    width: 100%;
+  }
+  margin: auto;
 }
 
-.input {
-  display: none;
+.dropzone {
+  width: 90%;
+  height: 300px;
+  margin: auto;
+  padding: $padding-default;
+  border: 1px solid $color-darkblue;
+  color: $color-darkblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include respond-to('medium') {
+    width: 500px;
+    transition: width 0.3s;
+    &:focus {
+      width: 90%;
+    }
+  }
+  @include rounded;
 }
-
+.dropzone-inner {
+  font-size: $font-sub-header;
+  font-family: $font-input;
+}
 .button {
   display: block;
   padding: $padding-default;

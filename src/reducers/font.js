@@ -10,6 +10,7 @@ const initialState = {
     link: '',
     currentFonts: [],
     error: '',
+    code: '-1', // error code
   },
 };
 
@@ -36,6 +37,7 @@ export default function font(state = initialState, action) {
         load: {
           status: { $set: 'FAILURE' },
           error: { $set: action.error },
+          code: { $set: action.code },
         },
       });
     case types.LOAD_FONT_FILE:
@@ -58,6 +60,7 @@ export default function font(state = initialState, action) {
         load: {
           status: { $set: 'FAILURE' },
           error: { $set: action.error },
+          code: { $set: action.code },
         },
       });
     case types.CLEAR_FONT:

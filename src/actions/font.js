@@ -14,7 +14,7 @@ import * as fontUtil from '../utils/font';
 
 
 const reader = new FileReader();
-
+const MAX_FONT_SIZE = 3 * 1024 * 1024; // 3MB
 const loadLink = link => ({
   type: LOAD_FONT_LINK,
   link,
@@ -26,9 +26,10 @@ const loadLinkSuccess = (fontName, isExist = false) => ({
   isExist,
 });
 
-const loadLinkFailure = (error) => ({
+const loadLinkFailure = (error, code) => ({
   type: LOAD_FONT_LINK_FAILURE,
   error,
+  code,
 });
 
 const loadFile = link => ({
@@ -42,16 +43,17 @@ const loadFileSuccess = (fontName, isExist = false) => ({
   isExist,
 });
 
-const loadFileFailure = (error) => ({
+const loadFileFailure = (error, code) => ({
   type: LOAD_FONT_FILE_FAILURE,
   error,
+  code,
 });
 
 export const loadFontLink = (link, currentFonts) => (
   dispatch => {
     dispatch(loadLink(link));
-    return axios.get(link).then((res) => {
-      const fileType = fontUtil.checkFileType(res.headers['content-type']);
+    return axios.get(link, { maxContentLength: MAX_FONT_SIZE }).then((res) => {
+      const fileType = fontUtil.checkLinkFileType(res.headers['content-type']);
       let fontName = '';
       if (fileType === 'css') {
         fontName = fontUtil.parseCSS(res.data, currentFonts);
@@ -67,18 +69,25 @@ export const loadFontLink = (link, currentFonts) => (
             dispatch(loadLinkSuccess(fontName));
           })
           .catch(() => {
-            dispatch(loadLinkFailure());
+            dispatch(loadLinkFailure('CANNOT LOAD FONT', 0));
           });
       }
-      dispatch(loadLinkFailure());
-    });
+      dispatch(loadLinkFailure('CANNOT GET LINK', 1));
+    })
+      .catch(() => {
+        dispatch(loadLinkFailure('CANNOT GET LINK', 1));
+      });
   }
 );
 
 export const loadFontFile = (file, type, currentFonts = []) => (
   dispatch => {
     dispatch(loadFile());
-    return new Promise((resolve, reject) => {
+    if (file.size >= MAX_FONT_SIZE) {
+      dispatch(loadFileFailure('EXCEED MAXIMUM SIZE.', 2));
+      Promise.resolve();
+    }
+    return new Promise((resolve) => {
       reader.onload = () => {
         /*
           1. Read Font file as Unit8Array, which file type is tff, woff, woff2, eot, otf, svg ...
@@ -89,6 +98,15 @@ export const loadFontFile = (file, type, currentFonts = []) => (
         */
         const arrayBuffer = reader.result;
         const byte = new Uint8Array(arrayBuffer);
+        let mimetype = type;
+        if (byte.length > 4) {
+          let magicnumber = '';
+          for (let i = 0; i < 4; i++) {
+            const hex = byte[i].toString(16);
+            magicnumber += `0${hex}`.substr(hex.length - 1, 2);
+          }
+          mimetype = fontUtil.checkFileType(magicnumber.toUpperCase());
+        }
         let binaryString = '';
         for (let i = 0; i < byte.length; i++) {
           binaryString += String.fromCharCode(byte[i]);
@@ -98,7 +116,7 @@ export const loadFontFile = (file, type, currentFonts = []) => (
         const fontName = fontUtil.getFontFamily(file.name);
         const isExist = checkExist(currentFonts, fontName);
         if (!isExist) {
-          fontUtil.parseFont(fontName, base64, type);
+          fontUtil.parseFont(fontName, base64, mimetype);
           if (fontName) {
             const font = new FontFaceObserver(fontName);
             return font.load()
@@ -107,19 +125,19 @@ export const loadFontFile = (file, type, currentFonts = []) => (
                 resolve();
               })
               .catch(() => {
-                dispatch(loadFileFailure('CANNOT LOAD FONT'));
-                reject();
+                dispatch(loadFileFailure('CANNOT LOAD FONT', 0));
+                resolve();
               });
           }
-          dispatch(loadFileFailure('CANNOT ADD STYLE'));
-          reject();
+          dispatch(loadFileFailure('CANNOT ADD STYLE', 3));
+          resolve();
         }
         dispatch(loadFileSuccess(fontName, true));
         resolve();
       };
-      reader.onerror = error => {
-        dispatch(loadFileFailure('CANNOT READ FILE'));
-        reject(error);
+      reader.onerror = () => {
+        dispatch(loadFileFailure('CANNOT READ FILE', 4));
+        resolve();
       };
       reader.readAsArrayBuffer(file); // readAsBinaryString - Must not used in production mode ?
     });

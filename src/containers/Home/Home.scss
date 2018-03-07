@@ -7,8 +7,4 @@
 .landing-container {
   margin: 2rem auto;
   width: 90%;
-  @include respond-to('medium') {
-    width: 80%;
-  };
-  display: flex;
 }
