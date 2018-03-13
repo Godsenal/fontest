@@ -1,12 +1,13 @@
 @import '../../styles/util.scss';
 
 .container {
-  width: 70%;
+  width: 90%;
+  padding: 2rem 1rem;
   @include respond-to('medium') {
     width: 700px;
     min-width: 500px;
+    padding: 2rem 5rem;
   }
-  padding: 2rem 5rem;
   margin: 3rem auto;
   border-radius: 20px;
   background: #fff;
@@ -14,7 +15,7 @@
 }
 
 .header {
-  font-size: $font-huge;
+  font-size: $font-header;
   font-family: $font-header;
   color: $color-darkblue;
 }

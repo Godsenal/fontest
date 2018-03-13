@@ -2,6 +2,9 @@
 
 .container {
   width: 100%;
+
+  margin-top: 100px;
+
   text-align: center;
 }
 
@@ -10,11 +13,19 @@
   font-size: $font-mega;
   color: #fff;
 }
-
 .sub-header {
   font-family: $font-body;
   font-size: $font-sub-header;
   color: #fff;
+}
+
+.input-container {
+  max-height: 700px;
+  transition: max-height .3s ease-in-out;
+}
+
+.input-container-collapse {
+  max-height: 0;
 }
 
 .divider {
@@ -33,7 +44,7 @@
   padding: $padding-default;
   color: white;
   font-size: $font-sub-header;
-  font-family: '$font-input';
+  font-family: $font-input;
   text-align: center;
   width: 90%;
   @include respond-to('medium') {

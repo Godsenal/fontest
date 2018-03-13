@@ -1,0 +1,41 @@
+@import '../../styles/util.scss';
+
+.container {
+  position: fixed;
+
+  width: 100%;
+
+  background: white;
+  color: black;
+
+  bottom: 0;
+  left: 0;
+  
+  opacity: 0;
+
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+  @include respond-to('medium') {
+    width: 40%;
+    left: 30%;
+  }
+  @include box-shadow(3);
+}
+
+.container-mount {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.container-unmount {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.content {
+  padding: 1rem;
+
+  font-family: $font-input;
+  font-size: $font-sub-header;
+}

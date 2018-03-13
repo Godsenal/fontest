@@ -10,10 +10,10 @@
 
 .dropzone {
   width: 90%;
-  height: 300px;
+  height: 100px;
   margin: auto;
   padding: $padding-default;
-  border: 1px solid $color-darkblue;
+  border: 1.5px dotted $color-darkblue;
   color: $color-darkblue;
   display: flex;
   align-items: center;

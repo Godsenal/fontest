@@ -15,11 +15,10 @@ export default class CardSection extends Component {
 
   render() {
     const { children, header } = this.props;
+    const headerComp = header ? <h2 className={cx('header')}>{header}</h2> : null;
     return (
       <div className={cx('container')}>
-        <h2 className={cx('header')}>
-          {header}
-        </h2>
+        {headerComp}
         {children}
       </div>
     );

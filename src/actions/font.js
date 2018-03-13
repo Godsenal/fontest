@@ -69,23 +69,32 @@ export const loadFontLink = (link, currentFonts) => (
             dispatch(loadLinkSuccess(fontName));
           })
           .catch(() => {
-            dispatch(loadLinkFailure('CANNOT LOAD FONT', 0));
+            dispatch(loadLinkFailure('Cannot load font.', 0));
           });
       }
-      dispatch(loadLinkFailure('CANNOT GET LINK', 1));
+      dispatch(loadLinkFailure('Cannot get link.', 1));
     })
       .catch(() => {
-        dispatch(loadLinkFailure('CANNOT GET LINK', 1));
+        dispatch(loadLinkFailure('Cannot get link.', 1));
       });
   }
 );
-
+/*
+  always 'resolve' for redux-thunk get promise function.
+  Cannot 'catch' anything from this promise.
+  So, how can handle error?
+  Answer is dispatch(loadFileFailure). <-- gives 'error' state to reducer.
+*/
 export const loadFontFile = (file, type, currentFonts = []) => (
   dispatch => {
     dispatch(loadFile());
     if (file.size >= MAX_FONT_SIZE) {
-      dispatch(loadFileFailure('EXCEED MAXIMUM SIZE.', 2));
-      Promise.resolve();
+      dispatch(loadFileFailure('Exceed maximum size (3MB).', 2));
+      return Promise.resolve();
+    }
+    else if (file.type) { // file type of font is always ''. Maybe should fix later.
+      dispatch(loadFileFailure('Invalid file type.', 2));
+      return Promise.resolve();
     }
     return new Promise((resolve) => {
       reader.onload = () => {
@@ -107,6 +116,10 @@ export const loadFontFile = (file, type, currentFonts = []) => (
           }
           mimetype = fontUtil.checkFileType(magicnumber.toUpperCase());
         }
+        if (!mimetype) {
+          dispatch(loadFileFailure('Cannot read file. Maybe invalid filetype.', 4));
+          resolve();
+        }
         let binaryString = '';
         for (let i = 0; i < byte.length; i++) {
           binaryString += String.fromCharCode(byte[i]);
@@ -125,18 +138,18 @@ export const loadFontFile = (file, type, currentFonts = []) => (
                 resolve();
               })
               .catch(() => {
-                dispatch(loadFileFailure('CANNOT LOAD FONT', 0));
+                dispatch(loadFileFailure('Cannot load font.', 0));
                 resolve();
               });
           }
-          dispatch(loadFileFailure('CANNOT ADD STYLE', 3));
+          dispatch(loadFileFailure('Cannot add style. Please try again.', 3));
           resolve();
         }
         dispatch(loadFileSuccess(fontName, true));
         resolve();
       };
       reader.onerror = () => {
-        dispatch(loadFileFailure('CANNOT READ FILE', 4));
+        dispatch(loadFileFailure('Cannot read file. Maybe invalid filetype.', 4));
         resolve();
       };
       reader.readAsArrayBuffer(file); // readAsBinaryString - Must not used in production mode ?

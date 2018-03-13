@@ -1,0 +1,66 @@
+@import '../../styles/util.scss';
+
+.dropdown-wrapper {
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.dropdown-button {
+  font-family: $font-input;
+  position: relative;
+  display: inline-block;
+  
+  padding: 0.3rem;
+
+  text-align: center;
+  
+  color: $color-blue;
+
+  @include button-bg(#fff);
+  @include rounded();
+}
+.dropdown-close {
+  &::after {
+    @include arrow-down();
+  }
+}
+.dropdown-open {
+  background: darken(#fff, 8%);
+  &::after {
+    @include arrow-up();
+  }
+}
+
+.dropdown-list {
+  font-family: $font-input;
+
+  display: none;
+  
+  position: absolute;
+  
+  width: 150px;
+  padding: 0.2rem;
+  margin: 0;
+
+  color: black;
+  background-color: #fff;
+
+  z-index: 999;
+
+  list-style-type: none;
+  text-align: center;
+
+  @include rounded();
+  @include box-shadow(2);
+
+  a {
+    display: block;
+    padding: 0.5rem;
+    @include button-bg(#fff);
+    @include rounded();
+  }
+}
+
+.show {
+  display: block;
+}

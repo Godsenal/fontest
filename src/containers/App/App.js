@@ -7,9 +7,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import styles from './App.scss';
-import Header from '../../components/Header';
 import Home from '../Home';
-import Write from '../Write';
 import { changeWidthAndHeight } from '../../actions/environment';
 
 const cx = classNames.bind(styles);
@@ -24,15 +22,21 @@ class App extends Component {
   componentDidMount() {
     window.addEventListener('resize', this.handleWindowResize);
   }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowResize);
+  }
   handleWindowResize = () => {
     this.props.changeWidthAndHeight();
   }
   render() {
     return (
       <div className={cx('container')}>
-        <Header />
         <Route exact path="/" component={Home} />
-        <Route path="/write" component={Write} />
+        { /*
+            Useless route now. Leaved it for further use.
+            <Route path="/write" component={Write} />
+          */
+        }
       </div>
     );
   }
