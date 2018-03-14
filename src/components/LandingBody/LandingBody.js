@@ -14,7 +14,7 @@ import Toast from '../../components/Toast';
 import { scrollToTargetSmooth } from '../../utils/scroll';
 
 const cx = classNames.bind(styles);
-const DEFAULT_HEADER = 60;
+const DEFAULT_HEADER = 60; // Default header height for right sroll postion.
 class LandingBody extends Component {
   state = {
     headerCollapse: false,
@@ -40,9 +40,28 @@ class LandingBody extends Component {
     this.checkHeaderCollpase();
   }
   handleInputEnter = (input) => {
-    this.props.loadFontLink(input, this.props.fontLoad.currentFonts)
+    const id = this.makeToast('Wait for font loading...', 'loading', 0);
+    const { fontLoad } = this.props;
+    this.props.loadFontLink(input, fontLoad.currentFonts)
       .then(() => {
-        this.scrollToElement(this._testsection);
+        if (this.props.fontLoad.status === 'SUCCESS') {
+          this._toast.removeToast(id);
+          this.makeToast('Successfully loaded!', 'success', 3000);
+          if (this._testsection) {
+            const { offsetTop } = this._testsection;
+            this.scrollToPosition(offsetTop);
+            // - ((window.innerHeight / 2) - (clientHeight / 2)) <- scroll to viewport that shows textarea at center.
+            // scroll until element is placed at center of window viewport.
+          }
+        }
+        else {
+          this._toast.removeToast(id);
+          this.makeToast(this.props.fontLoad.error, 'error', 3000);
+        }
+      })
+      .catch(() => {
+        this._toast.removeToast(id);
+        this.makeToast(this.props.fontLoad.error, 'error', 3000);
       });
   }
   handleFileUpload = (file, type) => {
@@ -66,6 +85,7 @@ class LandingBody extends Component {
         }
       });
   }
+  /* remove style sheet */
   handleClear = () => {
     this.props.clearFont();
     this.makeToast('Successfully Clear!', 'success', 3000);
@@ -115,7 +135,9 @@ class LandingBody extends Component {
         </div>
         <div className={cx('sub-header-wrapper')}>
           <p className={cx('sub-header')}>
-            Test your Font.
+            Type a link to css or font file.{'\n'}
+            Or drop local font file.{'\n'}
+            Then You can test it!
           </p>
         </div>
         <div ref={ref => { this._inputsection = ref; }}>
@@ -132,8 +154,17 @@ class LandingBody extends Component {
         </div>
         <div ref={ref => { this._howtosection = ref; }}>
           <CardSection header="How it works?">
-            <p>
-              Fontest uses base64 encoding
+            <p className={cx('paragraph')}>
+              <span>CSS with a link : </span>{'\n'} Extract @font-face declaration only.{'\n'}
+              <span>Font file with a link or a local file : </span>{'\n'} Base64 encode font file and directly add @font-face to the stylesheet.{'\n'}
+            </p>
+          </CardSection>
+        </div>
+        <div ref={ref => { this._madebysection = ref; }}>
+          <CardSection header="Made by">
+            <p className={cx('paragraph')}>
+              Made by <span>Godsenal</span>{'\n'}
+              Check out <span><a href="https://github.com/Godsenal/fontest">-Github repository-</a></span>{'\n'}
             </p>
           </CardSection>
         </div>

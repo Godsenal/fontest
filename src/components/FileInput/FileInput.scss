@@ -41,3 +41,7 @@
   @include rounded;
   @include button-bg($color-emerald);
 }
+.types {
+  font-family: $font-input;
+  color: $color-blue;
+}

@@ -14,8 +14,13 @@
   color: #fff;
 }
 .sub-header {
-  font-family: $font-body;
-  font-size: $font-sub-header;
+  word-break: break-word;
+  word-wrap: break-word;
+  white-space: pre-line;
+
+  font-family: $font-input;
+  font-size: $font-large;
+
   color: #fff;
 }
 
@@ -29,14 +34,18 @@
 }
 
 .divider {
-  @include divider($color-blue);
   width: 90%;
+
+  padding: $padding-default;
+  margin: 1.2rem auto;
+
+  font-weight: bold;
+
+  @include divider($color-darkblue);
   @include respond-to('medium') {
     width: 500px;
     transition: width 0.3s;
   }
-  padding: $padding-default;
-  margin: 1.2rem auto;
 }
 
 .button {
@@ -68,4 +77,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.paragraph {
+  word-break: break-word;
+  word-wrap: break-word;
+  white-space: pre-line;
+
+  font-family: $font-body;
+  font-size: 16px;
+
+  line-height: 1.8;
+
+  color: $color-darkblue;
+
+  span {
+    font-family: $font-input;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  a {
+    text-decoration: none;
+  }
 }

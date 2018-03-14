@@ -65,6 +65,12 @@ export default class ToastItem extends Component {
   _unmounted = false;
   _mountTime = null;
   _unmountTime = null;
+  /*
+    CASE unmount:
+    after unmount transition, call callback function onEnded and delete toast by using deleteToast prop.
+    CASE mount:
+    after mount transition, call callback function onStarted.
+  */
   onTransitionEnd = () => {
     const { mount } = this.state;
     const { onStarted, onEnded, unmount } = this.props;
@@ -78,6 +84,9 @@ export default class ToastItem extends Component {
       onStarted();
     }
   }
+  /*
+    change color for each type
+  */
   getStyleByColor = () => {
     const { type } = this.props;
     switch (type) {

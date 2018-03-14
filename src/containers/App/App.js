@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Route,
-} from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -31,7 +28,7 @@ class App extends Component {
   render() {
     return (
       <div className={cx('container')}>
-        <Route exact path="/" component={Home} />
+        <Home />
         { /*
             Useless route now. Leaved it for further use.
             <Route path="/write" component={Write} />

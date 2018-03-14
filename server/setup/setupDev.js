@@ -4,7 +4,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('../../config/webpack.config.dev.js');
 
-module.exports = function setupDev(app, option) {
+module.exports = function setupDev(app) {
   const compiler = webpack(config);
   const middleware = webpackDevMiddleware(compiler, {
     noInfo: true,
@@ -16,7 +16,7 @@ module.exports = function setupDev(app, option) {
   // https://github.com/jantimon/html-webpack-plugin/issues/145#issuecomment-170554832
   const fs = middleware.fileSystem;
   app.get('*', (req, res) => {
-    fs.readFile(path.join(option.outputPath, 'index.html'), (err, file) => {
+    fs.readFile(path.join(config.output.path, 'index.html'), (err, file) => {
       if (err) {
         res.sendStatus(404);
       }

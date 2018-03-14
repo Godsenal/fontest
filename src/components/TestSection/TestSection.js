@@ -37,6 +37,9 @@ export default class TestSection extends Component {
     fontLoad: PropTypes.object.isRequired,
     scrollToInput: PropTypes.func.isRequired,
   }
+  /*
+    Change style to cliked item in dropdown.
+  */
   handleItemClick = (value, label) => {
     switch (label) {
       case 'font-style':
@@ -57,22 +60,22 @@ export default class TestSection extends Component {
       fontSize: parseInt(e.target.value, 10),
     });
   }
-  renderInit = () => (
-    <div className={cx('init')}>
-      <button onClick={this.props.scrollToInput}>input</button>
-    </div>
-  )
+  /*
+    Change render as fontLoad status.
+    'INIT' or 'SUCCESS'.
+    render nothing both 'WAITING' and 'FAILURE'.
+  */
   renderBySwitch = (fontLoad) => {
     const { status, fontName } = fontLoad;
-    const { fontSize, fontStyle, fontWeight, dropdown } = this.state;
-    const textStyle = {
-      fontFamily: `'${fontName}'`,
-      fontSize,
-      fontStyle,
-      fontWeight,
-    };
     switch (status) {
-      case 'SUCCESS':
+      case 'SUCCESS': {
+        const { fontSize, fontStyle, fontWeight, dropdown } = this.state;
+        const textStyle = {
+          fontFamily: `'${fontName}'`,
+          fontSize,
+          fontStyle,
+          fontWeight,
+        };
         return (
           <div className={cx('testWrapper')}>
             <h2 className={cx('header')}>Test here!</h2>
@@ -116,6 +119,7 @@ export default class TestSection extends Component {
             </div>
           </div>
         );
+      }
       case 'INIT':
         return (
           <div className={cx('init')}>

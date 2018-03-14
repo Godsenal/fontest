@@ -6,7 +6,7 @@ const initialState = {
   load: {
     status: 'INIT',
     isLink: false,
-    fontName: 'monospace, cursive',
+    fontName: 'sans serif',
     link: '',
     currentFonts: [],
     error: '',

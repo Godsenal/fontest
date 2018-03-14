@@ -4,6 +4,7 @@ const s = document.createElement('style');
 s.id = 'fonttest-temp-style-sheet';
 const fontReg = /(css|woff2|woff|ttf|otf)/;
 
+/* get Mime type for font-face */
 export function getMime(type) {
   switch (type) {
     case 'ttf':
@@ -18,7 +19,7 @@ export function getMime(type) {
       return 'application/x-font-opentype';
   }
 }
-
+/* get Format type for font-face */
 export function getFormat(type) {
   switch (type) {
     case 'ttf':
@@ -29,18 +30,22 @@ export function getFormat(type) {
       return 'woff2';
     case 'svg':
       return 'svg';
-    case 'eot':
-      return 'eot';
     default:
       return 'opentype';
   }
 }
-
+/*
+  parse file name, and make fontFamily name.
+  trim, remove specail character.
+  If file name is nanum-gothic, it's font name will be nanumgohtic.
+*/
 export function getFontFamily(filename) {
   const fontFamily = filename.trim().split('.').slice(0, -1).join().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\/]/gi, '');
   return fontFamily;
 }
-
+/*
+  check file type matches with font reg
+*/
 export const checkLinkFileType = (type) => {
   let fileType = false;
   if (type) {
@@ -94,6 +99,9 @@ export const parseFont = (fontName, url, fileType, isLink = false) => {
 
   return fontName;
 };
+/*
+  read css data and remaining font-face only.
+*/
 export const parseCSS = (data, currentFonts) => {
   const reg = data.match(/@font-face {([^}]+)}/g);
   /* Get Font-family from style sheet */

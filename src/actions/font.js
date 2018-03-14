@@ -9,12 +9,12 @@ import {
   LOAD_FONT_FILE_FAILURE,
   CLEAR_FONT,
 } from '../constants/actionTypes';
-import { checkExist } from '../utils/check';
+import { checkExist, checkUrl } from '../utils/check';
 import * as fontUtil from '../utils/font';
 
 
 const reader = new FileReader();
-const MAX_FONT_SIZE = 3 * 1024 * 1024; // 3MB
+const MAX_FONT_SIZE = 8 * 1024 * 1024; // 8MB
 const loadLink = link => ({
   type: LOAD_FONT_LINK,
   link,
@@ -52,9 +52,14 @@ const loadFileFailure = (error, code) => ({
 export const loadFontLink = (link, currentFonts) => (
   dispatch => {
     dispatch(loadLink(link));
+    if (!checkUrl(link)) {
+      dispatch(loadLinkFailure('Not valid url.', 5));
+      return Promise.resolve();
+    }
     return axios.get(link, { maxContentLength: MAX_FONT_SIZE }).then((res) => {
       const fileType = fontUtil.checkLinkFileType(res.headers['content-type']);
       let fontName = '';
+      /* check file type css or font type */
       if (fileType === 'css') {
         fontName = fontUtil.parseCSS(res.data, currentFonts);
       }
@@ -88,14 +93,20 @@ export const loadFontLink = (link, currentFonts) => (
 export const loadFontFile = (file, type, currentFonts = []) => (
   dispatch => {
     dispatch(loadFile());
+    /* Check file size is larger than Maxsimum size */
     if (file.size >= MAX_FONT_SIZE) {
-      dispatch(loadFileFailure('Exceed maximum size (3MB).', 2));
+      dispatch(loadFileFailure('Exceed maximum size (8MB).', 2));
       return Promise.resolve();
     }
-    else if (file.type) { // file type of font is always ''. Maybe should fix later.
+    /*
+      Check file type is ''.
+      File type of font is always ''. Maybe should fix later.
+    */
+    else if (file.type) {
       dispatch(loadFileFailure('Invalid file type.', 2));
       return Promise.resolve();
     }
+
     return new Promise((resolve) => {
       reader.onload = () => {
         /*

@@ -52,24 +52,28 @@
   font-family: $font-logo;
   font-size: $font-large;
 
-  cursor: pointer;
-  transition: color 0.3s;
   text-decoration: none;
   &:hover {
-    color: $color-dark-naby;
+    cursor: pointer;
+    @include respond-to('medium') {
+      color: $color-dark-naby;
+      transition: color 0.3s;
+    }
   }
 }
 .menu-item {
   flex: 0 0 auto;
+  font-size: 1em;
   a {
     text-decoration: none;
-    transition: color 0.3s;
     &:hover {
       cursor: pointer;
-      color: $color-dark-naby;
+      @include respond-to('medium') {
+        color: $color-dark-naby;
+        transition: color 0.3s;
+      }
     }
 
-    padding: 1rem;
-    margin-right: 0.5rem;
+    padding: 0.5rem;
   }
 }

@@ -14,8 +14,12 @@ export default class Dropdown extends Component {
     label: PropTypes.string.isRequired,
     list: PropTypes.array.isRequired,
   }
+  /* close dropdown when mousedown on outside of dropdown */
   componentDidMount() {
     window.addEventListener('mousedown', this.handleClickOutside);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('mousedown', this.handleClickOutside);
   }
   openDropdown = () => {
     this.setState({

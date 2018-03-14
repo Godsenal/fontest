@@ -4,7 +4,7 @@ import ToastItem from './ToastItem';
 
 export default class Toast extends Component {
   state = {
-    toasts: [],
+    toasts: [], // array for saving toast object. will be render in map function.
   }
   _uniqueID = 0;
   getToast = (props) => ({
@@ -12,18 +12,18 @@ export default class Toast extends Component {
     unmount: false,
   });
   toastify = ({
-    message,
-    type,
-    time,
-    onStart,
-    onStarted,
-    onEnd,
-    onEnded,
+    message, // display message in toast
+    type, // type : ['success', 'error', 'loading] for color theme.
+    time, // message display time.
+    onStart, // onStart callback. right after mount.
+    onStarted, // onStarted callback. right after end of transition.
+    onEnd, // onEnd callback. right before unmount transition.
+    onEnded, // onEnd callbaack. right before unmount.
   }) => {
-    this._uniqueID = this._uniqueID + 1;
+    this._uniqueID = this._uniqueID + 1; // unique id for each toast.
     const toast = this.getToast({ id: this._uniqueID, message, type, time, onStart, onStarted, onEnd, onEnded });
-    this.addToast(toast);
-    return toast.id;
+    this.addToast(toast); // add toast to array.
+    return toast.id; // return toast id. can remove toast by this id.
   }
   addToast = (toast) => {
     this.setState((prevState) => ({
@@ -42,6 +42,10 @@ export default class Toast extends Component {
       toasts: prevState.toasts.filter((toast) => (toast.id !== id)),
     }));
   }
+  /*
+    unmount all toast.
+    doesn't delete directly for unmount transition.
+  */
   clear = () => {
     this.setState((prevState) => ({
       toasts: prevState.toasts.map((toast) => ({ ...toast, unmount: true })),
