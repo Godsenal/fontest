@@ -1,8 +1,8 @@
 @import '../../styles/util.scss';
 
 .container {
-  width: 90%;
-  padding: 2rem 1rem;
+  width: 100%;
+  padding: 2rem 0;
   @include respond-to('medium') {
     width: 700px;
     min-width: 500px;
