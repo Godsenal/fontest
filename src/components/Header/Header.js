@@ -30,7 +30,7 @@ class Header extends Component {
             <a onClick={() => scrollToElement('_howtosection')}>How it works?</a>
           </div>
           <div className={cx('menu-item')}>
-            <a onClick={() => this.scrollToElement('')}><GoHeart style={{ verticalAlign: 'baseline' }} /></a>
+            <a onClick={() => this.scrollToElement('_madebysection')}><GoHeart style={{ verticalAlign: 'baseline' }} /></a>
           </div>
         </div>
       </div>
