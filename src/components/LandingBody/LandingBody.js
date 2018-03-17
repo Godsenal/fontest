@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
+import GoMarkGithub from 'react-icons/lib/go/mark-github';
 
 import { loadFontLink, loadFontFile, clearFont } from '../../actions/font';
 import LinkInput from '../LinkInput';
@@ -164,7 +165,12 @@ class LandingBody extends Component {
           <CardSection header="Made by">
             <p className={cx('paragraph')}>
               Made by <span>Godsenal</span>{'\n'}
-              Check out <span><a href="https://github.com/Godsenal/fontest">-Github repository-</a></span>{'\n'}
+              Check out this project on{' '}
+              <span>
+                <a href="https://github.com/Godsenal/fontest">
+                  <GoMarkGithub style={{ verticalAlign: 'baseline' }} />
+                </a>{'\n'}
+              </span>
             </p>
           </CardSection>
         </div>

@@ -84,17 +84,17 @@
   word-wrap: break-word;
   white-space: pre-line;
 
-  font-family: $font-body;
+  font-family: $font-input;
   font-size: 16px;
 
-  line-height: 1.8;
+  line-height: 3;
 
-  color: $color-darkblue;
+  color: $color-lightblack;
 
   span {
-    font-family: $font-input;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
+    color: $color-darkblue;
   }
 
   a {
