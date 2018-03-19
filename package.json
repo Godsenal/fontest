@@ -1,5 +1,5 @@
 {
-  "name": "@tmqps78/react-boilerplate",
+  "name": "@tmqps78/fontest",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,7 +13,7 @@
     "start:production": "npm run build && npm run start:prod",
     "start:prod": "cross-env NODE_ENV=production node server",
     "start:forever": "npm run build && npm run start:for",
-    "start:for": "NODE_ENV=production forever server",
+    "start:for": "NODE_ENV=production forever start server",
     "clean:all": "npm run test:clean && npm run build:clean"
   },
   "keywords": [],
