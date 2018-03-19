@@ -172,7 +172,7 @@ export const loadFontFile = (file, type, currentFonts = []) => (
 export const clearFont = () => {
   const stylesheet = document.getElementById('fonttest-temp-style-sheet');
   if (stylesheet) {
-    stylesheet.remove();
+    stylesheet.innerHTML = '';
   }
   return {
     type: CLEAR_FONT,

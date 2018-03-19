@@ -19,6 +19,7 @@ const DEFAULT_HEADER = 60; // Default header height for right sroll postion.
 class LandingBody extends Component {
   state = {
     headerCollapse: false,
+    test: false,
   }
   static propTypes = {
     clearFont: PropTypes.func.isRequired,
@@ -41,50 +42,52 @@ class LandingBody extends Component {
     this.checkHeaderCollpase();
   }
   handleInputEnter = (input) => {
-    const id = this.makeToast('Wait for font loading...', 'loading', 0);
-    const { fontLoad } = this.props;
-    this.props.loadFontLink(input, fontLoad.currentFonts)
-      .then(() => {
-        if (this.props.fontLoad.status === 'SUCCESS') {
-          this._toast.removeToast(id);
-          this.makeToast('Successfully loaded!', 'success', 3000);
-          if (this._testsection) {
-            const { offsetTop } = this._testsection;
-            this.scrollToPosition(offsetTop);
-            // - ((window.innerHeight / 2) - (clientHeight / 2)) <- scroll to viewport that shows textarea at center.
-            // scroll until element is placed at center of window viewport.
-          }
-        }
-        else {
-          this._toast.removeToast(id);
-          this.makeToast(this.props.fontLoad.error, 'error', 3000);
-        }
-      })
-      .catch(() => {
-        this._toast.removeToast(id);
-        this.makeToast(this.props.fontLoad.error, 'error', 3000);
-      });
+    const id = this._toast.toastify({
+      message: 'Wait for font loading...',
+      type: 'loading',
+      time: 0,
+      onStarted: () => {
+        const { fontLoad } = this.props;
+        this.props.loadFontLink(input, fontLoad.currentFonts)
+          .then(() => {
+            this.loadCallback(id);
+          })
+          .catch(() => {
+            this.makeToast(this.props.fontLoad.error, 'error', 3000);
+            this._toast.removeToast(id);
+          });
+      },
+    });
   }
   handleFileUpload = (file, type) => {
-    const id = this.makeToast('Wait for font loading...', 'loading', 0);
-    const { fontLoad } = this.props;
-    this.props.loadFontFile(file, type, fontLoad.currentFonts)
-      .then(() => {
-        if (this.props.fontLoad.status === 'SUCCESS') {
-          this._toast.removeToast(id);
-          this.makeToast('Successfully loaded!', 'success', 3000);
-          if (this._testsection) {
-            const { offsetTop } = this._testsection;
-            this.scrollToPosition(offsetTop);
-            // - ((window.innerHeight / 2) - (clientHeight / 2)) <- scroll to viewport that shows textarea at center.
-            // scroll until element is placed at center of window viewport.
-          }
-        }
-        else {
-          this._toast.removeToast(id);
-          this.makeToast(this.props.fontLoad.error, 'error', 3000);
-        }
-      });
+    const id = this._toast.toastify({
+      message: 'Wait for font loading...',
+      type: 'loading',
+      time: 0,
+      onStarted: () => {
+        const { fontLoad } = this.props;
+        this.props.loadFontFile(file, type, fontLoad.currentFonts)
+          .then(() => {
+            this.loadCallback(id);
+          });
+      },
+    });
+  }
+  // scroll to test section and remove toast
+  loadCallback = (id) => {
+    if (this.props.fontLoad.status === 'SUCCESS') {
+      if (this._testsection) {
+        const { offsetTop } = this._testsection;
+        this.scrollToPosition(offsetTop);
+        // - ((window.innerHeight / 2) - (clientHeight / 2)) <- scroll to viewport that shows textarea at center.
+        // scroll until element is placed at center of window viewport.
+      }
+      this.makeToast('Successfully loaded!', 'success', 3000);
+    }
+    else {
+      this.makeToast(this.props.fontLoad.error, 'error', 3000);
+    }
+    this._toast.removeToast(id);
   }
   /* remove style sheet */
   handleClear = () => {
@@ -175,6 +178,7 @@ class LandingBody extends Component {
           </CardSection>
         </div>
         <Toast ref={ref => { this._toast = ref; }} />
+        {this.state.test ? <div style={{ position: 'fixed', width: 500, height: 500, top: 0, left: 0, background: 'black' }} /> : null }
       </div>
     );
   }

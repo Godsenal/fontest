@@ -6,7 +6,6 @@ import styles from './CardSection.scss';
 
 const cx = classNames.bind(styles);
 
-/* make class component, that makes enable giving ref to this component */
 export default class CardSection extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,

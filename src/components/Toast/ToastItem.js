@@ -35,6 +35,24 @@ export default class ToastItem extends Component {
   }
   componentDidMount() {
     const { onStart, onEnd, time } = this.props;
+    /*
+      wait until element is actually rendered dom.
+      componentDidMount doesn't guarantee element is actually rendered
+    */
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        this.setState({
+          mount: true,
+        }, () => onStart());
+      });
+    });
+    /*
+    this._mountTime = setTimeout(() => {
+      this.setState({
+        mount: true,
+      }, () => onStart()); // start callback
+    }, 10);
+    */
     /* unmount by end of time */
     if (time > 0) {
       this._unmountTime = setTimeout(() => {
@@ -43,12 +61,6 @@ export default class ToastItem extends Component {
         }, () => onEnd()); // end callback
       }, time);
     }
-    /* unmount by user's desire */
-    this._mountTime = setTimeout(() => {
-      this.setState({
-        mount: true,
-      }, () => onStart()); // start callback
-    }, 10);
   }
   /* when unmount by user */
   componentWillReceiveProps(nextProps) {

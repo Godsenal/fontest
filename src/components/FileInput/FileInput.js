@@ -14,7 +14,7 @@ export default class FileInput extends Component {
   static defaultPropts = {
     handleFileUpload: undefined,
   }
-  handleFileDrop = (files) => {
+  handleFileDrop =(files) => {
     if (files[0]) {
       const file = files[0];
       const { type } = file;
@@ -29,7 +29,7 @@ export default class FileInput extends Component {
             AVAILABLE_TYPE.map((type, i, arr) => <span key={i}>*.{type}{arr.length - 1 !== i ? ', ' : ''}</span>)
           }
         </p>
-        <Dropzone className={cx('dropzone')} onDrop={this.handleFileDrop} multiple={false}>
+        <Dropzone className={cx('dropzone')} onDropAccepted={this.handleFileDrop} multiple={false}>
           <p className={cx('dropzone-inner')}>Drop your file here</p>
         </Dropzone>
       </div>
