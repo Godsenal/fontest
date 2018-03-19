@@ -12,6 +12,8 @@
     "start": "cross-env NODE_ENV=development node server",
     "start:production": "npm run build && npm run start:prod",
     "start:prod": "cross-env NODE_ENV=production node server",
+    "start:forever": "npm run build && npm run start:forever",
+    "start:for": "NODE_ENV=production forever server",
     "clean:all": "npm run test:clean && npm run build:clean"
   },
   "keywords": [],
