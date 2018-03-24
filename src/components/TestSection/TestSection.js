@@ -11,6 +11,8 @@ export default class TestSection extends Component {
     fontSize: 16,
     fontWeight: 'normal',
     fontStyle: 'normal',
+    backgroundColor: 'white',
+    color: 'black',
     dropdown: [
       {
         id: 0,
@@ -60,6 +62,12 @@ export default class TestSection extends Component {
       fontSize: parseInt(e.target.value, 10),
     });
   }
+  handleInvert = () => {
+    this.setState((prevState) => ({
+      backgroundColor: prevState.color,
+      color: prevState.backgroundColor,
+    }));
+  }
   /*
     Change render as fontLoad status.
     'INIT' or 'SUCCESS'.
@@ -69,12 +77,15 @@ export default class TestSection extends Component {
     const { status, fontName } = fontLoad;
     switch (status) {
       case 'SUCCESS': {
-        const { fontSize, fontStyle, fontWeight, dropdown } = this.state;
+        const { fontSize, fontStyle, fontWeight, dropdown, backgroundColor, color } = this.state;
         const textStyle = {
           fontFamily: `'${fontName}'`,
           fontSize,
           fontStyle,
           fontWeight,
+          backgroundColor,
+          color,
+          borderColor: color,
         };
         return (
           <div className={cx('testWrapper')}>
@@ -101,6 +112,7 @@ export default class TestSection extends Component {
                   />
                 ))
               }
+              <div className={cx('invert')} onClick={this.handleInvert} style={{ backgroundColor }} />
             </div>
             <div className={cx('testarea-wrapper')}>
               <div className={cx('test-config')}>

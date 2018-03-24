@@ -93,6 +93,7 @@ class LandingBody extends Component {
   handleClear = () => {
     this.props.clearFont();
     this.makeToast('Successfully Clear!', 'success', 3000);
+    this.scrollToElement('_inputsection');
   }
   checkHeaderCollpase= () => {
     const top = window.pageYOffset || document.documentElement.scrollTop;

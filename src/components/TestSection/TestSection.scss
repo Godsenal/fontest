@@ -1,4 +1,4 @@
-@import '../../styles/util.scss';
+@import '../../styles/_util.scss';
 
 $testarea-header: 30px;
 
@@ -32,17 +32,20 @@ $testarea-header: 30px;
   margin: auto !important;
   padding: $padding-default 0;
   
-  transition: none !important;
-  line-height: 1.5;
-  background: white !important;
-  border: 1px solid $color-darkblue;
+  line-height: 1;
+  letter-spacing: 0em;
   text-align: center;
-
+  border: 1px solid;
+  
   font-family: sans-serif;
   font-size: 16px;
   font-weight: normal;
   font-style: italic;
 
+  transition:
+    font-size 0.3s,
+    color 0.3s,
+    background-color 0.3s;
   @include rounded();
 }
 .test-config {
@@ -71,6 +74,7 @@ $testarea-header: 30px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  flex-wrap: wrap;
 
   div {
     margin-right: 0.5rem;
@@ -78,12 +82,20 @@ $testarea-header: 30px;
 }
 .slider {
   display: flex;
+  flex: 0 1 auto;
   align-items: center;
 }
 .input {
-  width: 70px;
   font-size: 20px;
   text-align: center;
   border: 1px solid #5795b5;
   border-radius: 5px;
+}
+
+.invert {
+  flex: 0 0 20px;
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
 }
