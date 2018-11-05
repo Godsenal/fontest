@@ -118,8 +118,7 @@ export default class ToastItem extends Component {
   }
   render() {
     const { mount, unmount } = this.state;
-    const { message } = this.props;
-    const unmountProps = this.props.unmount;
+    const { message, unmount: unmountProps } = this.props;
     return (
       <div
         className={cx('container', { 'container-mount': mount, 'container-unmount': unmount || unmountProps })}
