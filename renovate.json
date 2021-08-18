@@ -1,5 +1,8 @@
 {
   "extends": ["config:base"],
   "rangeStrategy": "bump",
-  "commitMessagePrefix": ":arrow_up: "
+  "commitMessagePrefix": ":arrow_up: ",
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0
 }
+
