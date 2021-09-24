@@ -70,7 +70,7 @@
     "classnames": "^2.2.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-dropzone": "^4.2.9",
+    "react-dropzone": "^11.4.2",
     "react-icons": "^2.2.7",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
