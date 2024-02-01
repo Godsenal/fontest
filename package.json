@@ -61,7 +61,7 @@
     "url-loader": "^0.6.2",
     "webpack": "^3.11.0",
     "webpack-dev-middleware": "^2.0.6",
-    "webpack-hot-middleware": "^2.21.0"
+    "webpack-hot-middleware": "^2.26.1"
   },
   "dependencies": {
     "axios": "^0.18.0",
