@@ -44,7 +44,7 @@
     "express": "^4.16.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.9",
-    "fontfaceobserver": "^2.0.13",
+    "fontfaceobserver": "^2.3.0",
     "html-webpack-plugin": "^2.30.1",
     "immutability-helper": "^2.6.5",
     "jest": "^22.4.2",
